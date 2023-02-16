@@ -1,0 +1,5 @@
+package com.fds.FoodDelivery.model;
+
+public class Cuisines {
+
+}

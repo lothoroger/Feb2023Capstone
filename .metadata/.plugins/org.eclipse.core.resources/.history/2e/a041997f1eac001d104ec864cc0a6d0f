@@ -1,0 +1,13 @@
+package com.fds.FoodDelivery.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.fds.FoodDelivery.model.User;
+
+public interface UserRepository extends CrudRepository<User, Integer>{
+
+	Optional<User> findByEmailAndPassword(String email , String password);
+
+}
