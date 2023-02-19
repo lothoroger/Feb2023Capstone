@@ -1,5 +1,5 @@
 export class Cuisines {
-    Id: any;
+    id: any;
     name: any;
     origin: any;
     price: any;

@@ -16,8 +16,8 @@ export class RegisterComponent implements OnInit {
     email: new FormControl(null, [Validators.required, Validators.email]),
     password: new FormControl(null, [Validators.required]),
     role: new FormControl(null,[Validators.required] ),
-    firstName: new FormControl(null),
-    lastName: new FormControl(null),
+    firstname: new FormControl(null),
+    lastname: new FormControl(null),
     address: new FormControl(null),
     city: new FormControl(null ),
     state: new FormControl(null ),
@@ -32,10 +32,10 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
-   this.authService.UserRole();
+ //  this.authService.UserRole();
     this.router.queryParams.subscribe((params: any) => {
       this.registerForm.value.role = Object.values(params).toString();
-      console.log(" value of role is ",this.registerForm.value.role );
+      console.log(" value of role is = ",this.registerForm.value.role );
       if (this.registerForm.value.role == "Customer") {
         this.IsAdmin = false;
       } else {

@@ -14,9 +14,6 @@ export class DbService {
   user: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   userRetrievedBool: boolean = false;
 
-
-  customers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
-  custRetrievedBool: boolean = false;
   
   cuisines: BehaviorSubject<Cuisines[]> = new BehaviorSubject<Cuisines[]>([]);
   cuisinesRetrievedBool: boolean = false;
@@ -39,28 +36,15 @@ export class DbService {
   }
 
 
-  getCustomers() {
-    this.http.get(BaseUrls.getUrl(BaseUrls.USER_GROUPURL))
-      .subscribe({
-        next: async ({ code, user, message }: any) => {
-          this.customers.next(Object.assign([], user));
-          this.custRetrievedBool = true;
-                 
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
-
-  }
+ 
 
   getCuisines() {
     this.http.get(BaseUrls.getUrl(BaseUrls.CUISINES_GROUPURL))
       .subscribe({
-        next: async ({ code, cuisines, message }: any) => {
-          this.cuisines.next(Object.assign([], cuisines));
-          console.log("Cusines ", cuisines)
-          console.log("Cusines m ", message)
+        next: async ({ code, data, message }: any) => {
+          this.cuisines.next(Object.assign([], data));
+          console.log("DB Cusines ", data)
+          console.log("DB Cusines message ", message)
           this.cuisinesRetrievedBool = true;
                  
         },
@@ -68,25 +52,69 @@ export class DbService {
           console.log(error);
         }
       })
+    }
+
+
+    getCustomers() {
+      this.http.get(BaseUrls.getUrl(BaseUrls.USER_GROUPURL))
+        .subscribe({
+          next: async ({ code, data, message }: any) => {
+            this.user.next(data);
+            console.log("Users  customers ", data)
+            console.log("Users message ", message)
+            this.userRetrievedBool = true;
+                   
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+        
+        
+    }
+
+
+
+/*
+      deleteCuisines() {
+        this.http.get(BaseUrls.getUrl(BaseUrls.CUISINES_GROUPURL))
+          .subscribe({
+            next: async ({ code, data, message }: any) => {
+              this.cuisines.next(Object.assign([], data));
+              console.log("Cusines ", data)
+              console.log("Cusines m ", message)
+              this.cuisinesRetrievedBool = true;
+                     
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+
+
 
   }
 
+*/
 
-
-  addUser(data: any) {
-    console.log("Data on dbservice addUser ", data);
-    this.http.post(BaseUrls.addUser(BaseUrls.USER_GROUPURL), data)
+  addUser( newcust: User) {
+    console.log("Data on dbservice addUser ", newcust);
+    this.http.post(BaseUrls.addUrl(BaseUrls.USER_GROUPURL), newcust)
       .subscribe({
         next: ({ code, data, message }: any) => {
           this.user.next(data);
           this.userRetrievedBool = true;
-         
+          
         },
         error: (error) => {
           console.log(error);
         }
       })
-
+      if (newcust.role = "Customer") {
+        this.router.navigateByUrl('/orders');
+        } else {
+          this.router.navigateByUrl('/customers');
+        }
   }
 
   /*loginUser(value: { email: string; password: string} ) {

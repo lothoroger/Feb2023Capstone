@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { Cuisines } from 'src/app/model/cuisines';
 import { DbService } from 'src/app/services/db.service';
+import { BaseUrls } from 'src/assets/BaseUrls';
 
 @Component({
   selector: 'app-cuisines',
@@ -30,36 +30,37 @@ export class CuisinesComponent {
 
     })
   }
-/*
 
-  openModal(modal: any, food: Food | null = null) {
+
+  openModal(modal: any, food: Cuisines | null = null) {
     this.initializeModal(food);
     this.modalService.open(modal, { size: "xl" });
   }
 
 
-  initializeModal(foodObj: Food | null) {
+  initializeModal(foodObj: Cuisines | null) {
     if (foodObj == null) {
       this.updation = false;
       this.foodForm = this.fb.group({
+        id: [""],
         name: ["", Validators.required],
         origin: ["", Validators.required],
         price: [0, Validators.required],
-        stock: [""],
-        addedon: ["", Validators.required],
-        imageurl: [""],
+        available: [0],
+        addedon: [""],
+        image: [""],
       });
 
     } else {
       this.updation = true;
       this.foodForm = this.fb.group({
-        foodId: [foodObj.foodId],
+        id: [foodObj.id],
         name: [foodObj.name, Validators.required],
         origin: [foodObj.origin, Validators.required],
         price: [foodObj.price, Validators.required],
-        stock: [foodObj.stock],
-        addedon: [foodObj.addedon, Validators.required],
-        imageurl: [foodObj.imageurl],
+        available: [foodObj.available],
+        addedon: [foodObj.addedon],
+        image: [foodObj.image],
 
       });
     }
@@ -67,7 +68,7 @@ export class CuisinesComponent {
 
   saveCuisine() {
     if (this.updation == true) {
-      this.http.put(`${BaseUrls.getUpdateUrl(BaseUrls.FOODS_GROUPURL)}/${this.foodForm.value.foodId}`, this.foodForm.value)
+      this.http.put(`${BaseUrls.updateUrl(BaseUrls.CUISINES_GROUPURL)}/${this.foodForm.value.id}`, this.foodForm.value)
         .subscribe({
           next: ({ code, data, message }: any) => {
             console.log('Update Cuisine', data)
@@ -81,7 +82,7 @@ export class CuisinesComponent {
     } else {
       console.log('Add Cuisine ', this.foodForm.value)
 
-      this.http.post(`${BaseUrls.getAddUrl(BaseUrls.FOODS_GROUPURL)}`, this.foodForm.value)
+      this.http.post(`${BaseUrls.addUrl(BaseUrls.CUISINES_GROUPURL)}`, this.foodForm.value)
         .subscribe({
           next: ({ code, message, data }: any) => {
             console.log("Adding Food ", this.foodForm.value);
@@ -93,42 +94,73 @@ export class CuisinesComponent {
 
           }
         })
-
+        
     }
+   
     this.modalService.dismissAll();
-    this.foodService.getFoods();
+        this.dbService.getCuisines();
   }
 
 
 
-  deleteFood(id: any) {
-    console.log('Food list delete', id)
-    /*this.foodlist = this.foodlist.filter(x => x.foodId != id)
-    this.http.get(`${BaseUrls.getDeleteUrl(BaseUrls.FOODS_GROUPURL)}/${id}`)
-      .subscribe({
-        next: (value) => {
-          this.foodlist.splice(id, 1)
-        },
-        error: (error) => {
-          console.log("Error on Delete ", error);
-        }
-      })
+deleteCuisine(id: any) {
+  console.log('Food list delete', id)
+   this.foodlist = this.foodlist.filter(x => x.id != id)
+   this.http.delete(`${BaseUrls.deleteUrl(BaseUrls.CUISINES_GROUPURL)}/${id}`)
+    .subscribe({
+      next: () => {
+        this.foodlist.splice(id, 1)
+        console.log("Cuisine deleted ", id);
+      },
+      error: (error) => {
+        console.log("Error on Delete ", error);
+      }
+    })
+
+    this.modalService.dismissAll();
+    this.dbService.getCuisines();
+
+}
+
+updateCuisine( foodForm: any) {
+  console.log('Food Update ', foodForm.get('id'))
+   this.foodlist = this.foodlist.filter(x => x.id != foodForm.get('id'))
+   this.http.put(`${BaseUrls.updateUrl(BaseUrls.CUISINES_GROUPURL)}/${this.foodlist}`,foodForm)
+   .subscribe({
+      next: () => {
+        //this.foodlist.splice(id, 1)
+        console.log("Update Cuisine foodForm ", foodForm);
+        console.log("Update Cuisine this.foodlist ", this.foodlist)
+      },
+      error: (error) => {
+        console.log("Error on Delete ", error);
+      }
+    })
+
+    this.modalService.dismissAll();
+    this.dbService.getCuisines();
+
+}
+
+addCuisine() {
+  console.log("Add Cuisine ", this.foodForm.value);
+  this.http.post(BaseUrls.addUrl(BaseUrls.CUISINES_GROUPURL), this.foodForm.value)
+    .subscribe({
+      next: () => {
+        console.log("Add Cuisine  ", this.foodForm.value);
+        console.log("Add Cuisine this.foodlist ", this.foodlist)
+   
+       
+      },
+      error: (error) => {
+        console.log("Error on Add Cuisine ", error);
+      }
+    })
+
+    this.modalService.dismissAll();
+    this.dbService.getCuisines();
+}
 
 
-    this.foodlist = this.foodlist.filter(x => x.foodId != id)
-    this.http.get(`${BaseUrls.getDeleteUrl(BaseUrls.FOODS_GROUPURL)}/${id}`)
-      .subscribe({
-        next: (value) => {
-          this.foodlist?.splice(id, 1);
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
-
-  }
-
-
-*/
 
 }
