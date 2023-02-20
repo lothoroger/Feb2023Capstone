@@ -13,28 +13,30 @@ import { User } from '../model/user';
 export class DbService {
   user: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   userRetrievedBool: boolean = false;
-
+  users : any;
   
   cuisines: BehaviorSubject<Cuisines[]> = new BehaviorSubject<Cuisines[]>([]);
   cuisinesRetrievedBool: boolean = false;
 
 
   constructor(private http: HttpClient, private router: Router, private toast: ToastrService) { }
-
-  getUser() {
-    this.http.get(BaseUrls.getLoginUrl(BaseUrls.USER_GROUPURL))
+/*
+  loginUser(datac: any) {
+      this.http.post(BaseUrls.getLoginUrl(BaseUrls.USER_GROUPURL), datac)
       .subscribe({
-        next: ({ code, findUser, message }: any) => {
-          this.user.next(findUser);
+        next: ({ code, message, datat}: any) => {
+           this.user.next(Object.assign([],datat));
+
           this.userRetrievedBool = true;
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
+            localStorage.setItem("role",JSON.stringify(datat));
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+      }
 
-  }
-
+*/
 
  
 
@@ -43,8 +45,8 @@ export class DbService {
       .subscribe({
         next: async ({ code, data, message }: any) => {
           this.cuisines.next(Object.assign([], data));
-          console.log("DB Cusines ", data)
-          console.log("DB Cusines message ", message)
+          console.log("Cusines ", data)
+          console.log("Cusines m ", message)
           this.cuisinesRetrievedBool = true;
                  
         },
@@ -63,7 +65,7 @@ export class DbService {
             console.log("Users  customers ", data)
             console.log("Users message ", message)
             this.userRetrievedBool = true;
-                   
+                 
           },
           error: (error) => {
             console.log(error);
@@ -97,24 +99,21 @@ export class DbService {
 
 */
 
-  addUser( newcust: User) {
-    console.log("Data on dbservice addUser ", newcust);
-    this.http.post(BaseUrls.addUrl(BaseUrls.USER_GROUPURL), newcust)
+  addUser(data: any) {
+    console.log("Data on dbservice addUser ", data);
+    this.http.post(BaseUrls.addUrl(BaseUrls.USER_GROUPURL), data)
       .subscribe({
         next: ({ code, data, message }: any) => {
           this.user.next(data);
           this.userRetrievedBool = true;
-          
+         
         },
         error: (error) => {
           console.log(error);
         }
       })
-      if (newcust.role = "Customer") {
-        this.router.navigateByUrl('/orders');
-        } else {
-          this.router.navigateByUrl('/customers');
-        }
+     
+      this.router.navigateByUrl('/orders');
   }
 
   /*loginUser(value: { email: string; password: string} ) {

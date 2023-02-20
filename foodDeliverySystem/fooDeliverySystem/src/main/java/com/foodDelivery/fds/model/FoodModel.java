@@ -19,7 +19,7 @@ public class FoodModel implements Serializable {
 	private String origins;
 	private String cookTime;
 	private String addOn;
-	private Boolean stock;
+	private Boolean available;
 
 	public FoodModel() {
 	}

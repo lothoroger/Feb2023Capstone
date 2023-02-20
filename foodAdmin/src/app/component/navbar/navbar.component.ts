@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -9,44 +10,30 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute, private authService: AuthService) { }
-  role = "";
-  IsAdmin = false;
-  isLogin: boolean = false;
-  ngOnInit(): void {
+  constructor(private router: Router, private authService: AuthService) { }
+ 
+  IsAdmin =  false;
+  IsLogin = false;
+  ngOnInit(): void { 
 
-    this.router.queryParams.subscribe((params: any) => {
+    if (localStorage.getItem("IsLogin") == "true") {
+      this.IsLogin = true;
+      console.log("nav bar is IsLogin true");
+    } 
 
-      this.role = Object.values(params).toString();
-
-      if (this.role == "Customer") {
-        this.IsAdmin = false;
-      } else {
-        this.IsAdmin = true;
-      }
-    });
-
-
-    this.authService.User.subscribe((data) => {
-      if (data) {
-        this.isLogin = true;
-      } else {
-        this.isLogin = false;
-      }
-    })
-
-  }
-  login() {
-    let data = {
-      Username: "admin@lanl.gov",
-      Password: "admin123"
+    if (localStorage.getItem("IsAdmin") == "true") {
+      this.IsAdmin = true;      
+      console.log("nav bar ADMIN ");
+    } 
+   
     }
-   // this.authService.SignInUser(data);
-  }
+ 
+    logout() {
+      this.IsAdmin, this.IsLogin = false;
+      localStorage.clear();
+      this.router.navigate(['/home']).then( ()=> window.location.reload());
+      
+    }
 
-  logout() {
-  //  this.authService.SignOutUser();
-
-  }
 
 }

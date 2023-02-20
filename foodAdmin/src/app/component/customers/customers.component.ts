@@ -22,6 +22,8 @@ export class CustomersComponent {
   custRetrievedBool: boolean = false;
   updation: boolean = false;
   loader: boolean = false;
+  loggeduser: any;
+  
   constructor(private dbService: DbService,
     private http: HttpClient,
     private modalService: NgbModal,
@@ -95,17 +97,11 @@ export class CustomersComponent {
             error: (error) => {
               console.log("Error on Delete ", error);
             }
-          })
-      
-         
-      
+          })      
       }
 
 
       saveUser() {
-  console.log(" what is the value of " ,this.custForm.value.id);
-  console.log(" what is the value of frd " ,this.custForm.value);
-
            if (this.updation == true) {
           this.http.put(`${BaseUrls.updateUrl(BaseUrls.USER_GROUPURL)}/${this.custForm.value.id}`, this.custForm.value)
             .subscribe({

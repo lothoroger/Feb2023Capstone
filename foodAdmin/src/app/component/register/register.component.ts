@@ -27,12 +27,11 @@ export class RegisterComponent implements OnInit {
   constructor(private router: ActivatedRoute, private dbservice: DbService, private authService: AuthService) { }
  
   IsAdmin = false;
-  role = this.registerForm.value.role;
+  role= "";
   
 
   ngOnInit(): void {
-
- //  this.authService.UserRole();
+    
     this.router.queryParams.subscribe((params: any) => {
       this.registerForm.value.role = Object.values(params).toString();
       console.log(" value of role is = ",this.registerForm.value.role );
@@ -41,10 +40,12 @@ export class RegisterComponent implements OnInit {
       } else {
         this.IsAdmin = true;
       }
+      this.role = this.registerForm.value.role;
     }); 
   }
 
   Register() {
+    
     this.router.queryParams.subscribe((params: any) => {
     this.registerForm.value.role = Object.values(params).toString();
     console.log("Registration ", this.registerForm.value);

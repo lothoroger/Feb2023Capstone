@@ -20,9 +20,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'password', component: PasswordComponent },
-  { path: 'customers', component: CustomersComponent },
+  { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard] },
   { path: 'payment', component: PaymentComponent },
-  { path: 'cuisines', component: CuisinesComponent },
+  { path: 'cuisines', component: CuisinesComponent, canActivate: [AuthGuard] },
   { path: 'cart', component: CartComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'administrator', component: AdministratorComponent }

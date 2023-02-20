@@ -31,11 +31,13 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    
   }
 
   handleLogin() {
-  // this.authService.loginUser(this.loginForm.value);
+      
+      this.authService.loginUser(this.loginForm.value);
+    
 
   }
 

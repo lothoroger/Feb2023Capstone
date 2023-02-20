@@ -20,6 +20,7 @@ import { PaymentComponent } from './component/payment/payment.component';
 import { CuisinesComponent } from './component/cuisines/cuisines.component';
 import { CartComponent } from './component/cart/cart.component';
 import { OrdersComponent } from './component/orders/orders.component';
+import { AuthGuard } from './guard/auth.guard';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { OrdersComponent } from './component/orders/orders.component';
     CuisinesComponent,
     CartComponent,
     OrdersComponent
+
   ],
   imports: [
     AppRoutingModule,
@@ -44,14 +46,14 @@ import { OrdersComponent } from './component/orders/orders.component';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 3000,
+      timeOut: 6000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
       countDuplicates: true,
       tapToDismiss: true
     })
   ],
-  providers: [AuthService, DbService],
+  providers: [AuthService, DbService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

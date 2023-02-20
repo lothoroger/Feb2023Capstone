@@ -1,5 +1,0 @@
-package com.fds.FoodDelivery.repository;
-
-public interface UserRepository {
-
-}

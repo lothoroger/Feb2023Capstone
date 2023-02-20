@@ -6,4 +6,5 @@ export class Cuisines {
     available: any;
     addedon: any;
     image: any;
+    fimage: any;
 }

@@ -1,36 +1,54 @@
 <div class="container-fluid vh-100">
     <div class="row" style="height: inherit;">
-        <div class="col-12 col-sm-6 d-flex flex-column justify-content-center align-items-start px-4" id="bg">
-            <h3 class="text-white text-uppercase m-0 mb-1">Category: South American</h3>
-            <p class="m-0 text-white h5">Your latest order</p>
-            <ul class="list-group mt-5 text-white" style="list-style-type: none; margin: 0; padding: 0;">
-                <li>Qty: 1</li>
-                <li>Price: $9.95 </li>
-                <li>Tax: $3.50</li>
-                <li>Total Amouth: $13.45</li>
-            </ul>
-        </div>
-          <div class="col-12 col-sm-6 d-flex flex-column justify-content-center align-items-center" >
-            <div class="card w-75 shadow-sm">
+        <div class="col-12 col-sm-8 d-flex flex-column justify-content-center align-items-center">
+            <div class="card w-100 shadow-lg">
                 <div class="card-header bg-white border-0">
                     <h3 class="text-center m-0">Your Order</h3>
-                    <hr>
-                  </div>
+                </div>
                 <div class="card-body">
-                  
-                    <div class="col-6 col-sm-3"><img class="d-block w-100" src="assets/images/tacos.jpg" alt="Tacos">Please Pay $13.45 for 1 Taco</div>
-                               
-                    <div class="form-group col-12 mt-2 ">
-                       
-                        <a routerLink="/payment" class="btn btn-primary">
-                            Pay by Credit Card
-                        </a>
-                      </div>     
-                  </div>
 
+                    <div *ngIf="cart && cart.items.length" class="container">
+                        <ul>
+                            <li *ngFor="let cartItem of cart.items">
+                                <div>
+                                    <img src="/assets/images/{{ cartItem.food.image}}.jpg">
+                                </div>
+                                <div>
+                                    {{cartItem.food.name}}
+
+                                </div>
+                                <div>
+                                    <select #quantitySelect [value]="cartItem.quantity"
+                                        (change)="changeQuantity(cartItem, quantitySelect.value)">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    {{cartItem.price | currency}}
+                                </div>
+
+                                <div>
+                                    <button class="remove-button" (click)="removeFromCart(cartItem)">
+                                        Remove
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="checkout">
+                            <div>
+                                <div class="foods-count">{{cart.totalCount}}</div>
+                                <div class="total-price">{{cart.totalPrice|currency}}</div>
+                            </div>
+
+                            <p class="corder"><a routerLink="/orders">Continue to Order</a></p>
+                            <p><a routerLink="/payment">Proceed to Checkout</a></p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
-
-
-

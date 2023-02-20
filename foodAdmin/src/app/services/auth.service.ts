@@ -17,6 +17,7 @@ export class AuthService {
   customers: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   custRetrievedBool: boolean = true;
   IsAdmin = false;
+  authInfo$ = false;
   constructor(
     // private authorize: AuthService,
     private toast: ToastrService,
@@ -26,34 +27,9 @@ export class AuthService {
 
   ) { }
 
-/*
-  public get UserSubjectValue() {
-    if (this.IsAdmin) {
-      console.log("auth service UserSubjectValue ", this.User)
-      return this.IsAdmin;
-    } else {
-      console.log("auth on UserSubjectvalue is not ture ", this.User)
-      console.log("auth on UserSubjectvalue is not ture a ", this.IsAdmin)
-      return null
-    }
-  }
 
-
-  SignInUser(loginaccount: any) {
-    console.log("login user", loginaccount.Username);
-    if (loginaccount.Username == "admin@lanl.gov") {
-      this.User.next(loginaccount);
-    }
-  }
-
-  SignOutUser() {
-    this.User.next(null);
-  }
-
-
-  role: any;
-*/
-  ngOnInit(): void {
+ ngOnInit(): void {
+    localStorage.clear();
   /*  this.routed.queryParams.subscribe((params: any) => {
       this.User.value.role = Object.values(params).toString();
       console.log(" value of role is ",this.User.value.role );
@@ -89,34 +65,37 @@ export class AuthService {
     }
     console.log("Login form ", loginaccount);
     this.authorize.SignInUser(loginaccount);  } 
+*/
 
-  loginUser(data: any ) {
-    
-    window.alert(JSON.stringify(data));
-    console.log("auth service Loginuser ", data);
-    const formData = new FormData();
-    formData.append("email", data.email.trim() || "");
-    formData.append("password", data.password.trim() || "");
+
+
+  loginUser(datac: any ) {
    
-
-    this.http.post(BaseUrls.getLoginUrl(BaseUrls.USER_GROUPURL), formData)
+    const cdatac = JSON.stringify(datac);
+     this.http.post(BaseUrls.getLoginUrl(BaseUrls.USER_GROUPURL), JSON.parse(cdatac))
       .subscribe({
-        next:  async({ code, formData, message }: any) => {
-          localStorage.setItem("authCode: ", formData);
-          //this.toast.success(message, "Login Successfull");
-          console.log("loginUser auth Is amdin ", this.User.value);
-          if (this.UserSubjectValue) {
-            console.log("baseurl login line 111 True for UserSubjectvalue");
-          this.router.navigate(['/payment'], { replaceUrl: true })
+        next:  async({ code, datat, message }: any) => {
+          localStorage.setItem("role", JSON.stringify(datat));
+          localStorage.setItem("IsLogin","true");
+
+          if (datat.role == "Admin") {
+            this.IsAdmin = true;
+             localStorage.setItem("IsAdmin", "true");
+             this.router.navigate(['/customers']).then(()=>location.reload())
+             this.toast.success("Administrator Successful ");
+            
           }
           else {
-            console.log("baseurl login line 111 false for UserSubjectvalue");
-            this.router.navigate(['/customers'], { replaceUrl: true })
+            localStorage.setItem("IsAdmin", "false")
+            this.router.navigate(['/orders'], { replaceUrl: true }).then(()=>window.location.reload())
+            this.toast.success("Customer Successful ");
+           
           }
-        
+      
 
         },
         error: (error) => {
+          this.toast.success("Account does not exists");
           console.log(error);
         }
       })
@@ -125,11 +104,7 @@ export class AuthService {
   logout() {
     localStorage.clear();
     this.router.navigate(['login'], { replaceUrl: true });
+    window.location.reload();
   }
-
-
-
-*/
-
 
 }

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Cuisines } from 'src/app/model/cuisines';
+import { CartService } from 'src/app/services/cart.service';
 import { DbService } from 'src/app/services/db.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { DbService } from 'src/app/services/db.service';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent {
-  constructor(private httpClient: HttpClientModule, private cuisineService: DbService,  private router: Router) { }
+  constructor(private httpClient: HttpClientModule, private cuisineService: DbService, private cartService: CartService, private router: Router) { }
 
   cuisineForm: FormGroup = new FormGroup({});
   cuisinelist: Cuisines[] | undefined;
@@ -29,7 +30,7 @@ export class OrdersComponent {
 
 
   addToCart(cuisine: Cuisines) {
-    //this.cartService.addToCart(cuisine);
+    this.cartService.addToCart(cuisine);
     this.router.navigateByUrl('/cart');
   }
 
