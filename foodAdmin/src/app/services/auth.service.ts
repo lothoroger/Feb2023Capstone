@@ -81,7 +81,7 @@ export class AuthService {
           if (datat.role == "Admin") {
             this.IsAdmin = true;
              localStorage.setItem("IsAdmin", "true");
-             this.router.navigate(['/customers']).then(()=>location.reload())
+             this.router.navigate(['/customers']).then(()=>location.reload()) //to redisplay for SignOut
              this.toast.success("Administrator Successful ");
             
           }
